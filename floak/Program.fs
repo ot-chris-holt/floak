@@ -1,65 +1,23 @@
-﻿module borrowedgames
+﻿module main
 
 open firefox
 open register
  
-describe "login fails when user is not registered"
-url "http://localhost:3000/Account/LogOn"
-write "#Email" "lefthandedgoat@gmail.com"
-write "#Password" "mypassword1"
-click "input[value='login']"
-(read "#main") |> contains "Login failed."
+describe "h1 should have John"
+url @"C:\projects\floak\floak\BasicPage.html"
+"#welcome" == "Welcome"
 
-describe "clicking register takes you to the registration page"
-url "http://localhost:3000/Account/LogOn"
-click "a[href='/Account/Register']"
-(currentUrl ()) |> equals registerUrl
+describe "textbox should have John"
+url @"C:\projects\floak\floak\BasicPage.html"
+"#firstName" == "John"
 
-describe "registration fails with error when you dont type an email"
-url registerUrl
-click register
-(currentUrl ()) |> equals registerUrl
-(read "#main") |> contains "Email is required."
+describe "textbox should have Doe"
+url @"C:\projects\floak\floak\BasicPage.html"
+"#lastName" == "Doe"
 
-describe "registration fails with error when you dont type a valid email"
-url registerUrl
-write email "aldfjalfdjalsjdf"
-click register
-(currentUrl ()) |> equals registerUrl
-(read "#main") |> contains "Email is invalid."
-
-describe "registration fails with error when you dont type a password"
-url registerUrl
-write email "lefthandedgoat@gmail.com"
-click register
-(currentUrl ()) |> equals registerUrl
-(read "#main") |> contains "Password is required."
-
-describe "registration fails with error when you dont type matching paswords"
-url registerUrl
-write email "lefthandedgoat@gmail.com"
-write password "mypassword1"
-write passwordConfirmation "mypassword2"
-click register
-(currentUrl ()) |> equals registerUrl
-(read "#main") |> contains "Passwords do not match."
-
-describe "registration completes when you enter valid information"
-url registerUrl
-write email "lefthandedgoat@gmail.com"
-write password "mypassword1"
-write passwordConfirmation "mypassword1"
-click register
-(currentUrl ()) |> equals "http://localhost:3000/"
-
-describe "registration fails when you try to register with an existing email address"
-url registerUrl
-write email "lefthandedgoat@gmail.com"
-write password "mypassword1"
-write passwordConfirmation "mypassword1"
-click register
-(currentUrl ()) |> equals registerUrl
-(read "#main") |> contains "Email is unavailable."
+describe "ajax label should have ajax loaded"
+url @"C:\projects\floak\floak\BasicPage.html"
+"#ajax" == "ajax loaded"
 
 quit ()
 

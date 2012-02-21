@@ -3,6 +3,8 @@ module firefox
 
 open OpenQA.Selenium.Firefox
 open OpenQA.Selenium
+open OpenQA.Selenium.Support.UI
+open System
 
 let browser = new FirefoxDriver()
 
@@ -12,10 +14,13 @@ let write (cssSelector : string) (text : string) =
     let element = browser.FindElement(By.CssSelector(cssSelector))
     element.SendKeys(text)
 
-let read (cssSelector : string) = 
+let read (cssSelector : string) =    
     let element = browser.FindElement(By.CssSelector(cssSelector))
-    element.Text
-
+    if element.TagName = "input" then
+        element.GetAttribute("value")
+    else
+        element.Text    
+        
 let clear (cssSelector : string) = 
     let element = browser.FindElement(By.CssSelector(cssSelector))
     element.Clear()
@@ -34,6 +39,15 @@ let equals value1 value2 =
     else
         System.Console.WriteLine("equality check failed.  expected: {0}, got: {1}", value1, value2);
     ()
+
+let (==) element value =
+    let wait = new WebDriverWait(browser, TimeSpan.FromSeconds(3.0))
+    try
+        wait.Until(fun b -> (read element) = value) |> ignore
+    with
+        | :? Exception -> ()
+
+    equals value (read element)
     
 let contains (value1 : string) (value2 : string) =
     if (value2.Contains(value1) = true) then

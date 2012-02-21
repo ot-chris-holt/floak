@@ -1,0 +1,5 @@
+_Resharper.floak
+*.ReSharper.user
+floak/bin/**/*
+floak/obj/**/*
+*.suo
