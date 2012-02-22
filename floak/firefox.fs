@@ -8,7 +8,9 @@ open System
 
 let browser = new FirefoxDriver()
 
-let url (u : string) = browser.Navigate().GoToUrl(u)
+let ( !^ ) (u : string) = browser.Navigate().GoToUrl(u)
+
+let url (u : string) = !^ u
 
 let write (cssSelector : string) (text : string) = 
     let element = browser.FindElement(By.CssSelector(cssSelector))
